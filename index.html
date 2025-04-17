@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-SgOJa3DmI69IUzQ2PVdRZhwQ+dy64/BUtbMJw1MZ8t5HZApcHrRKUc4W0kG879m7" crossorigin="anonymous">
+    <script src="./index.js" defer></script>
+    <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+
+    <div class="container text-center">
+        <div class="row">
+          <div class="col-sm-8">
+            <h2>Dashboard</h2>
+            <div class="container-dashboard">
+                <form action="http://localhost:3000/transaction" method="post" id="form">
+                  <h2 id="titulo">Register a transaction</h2>
+                  <label for="name">Transaction's name:</label>
+                  <input type="text" id="name" name="name" class="form-control mb-2">
+                  
+                  <label for="value">Transaction's value:</label>
+                  <input type="number" id="value" name="value" class="form-control mb-3">
+
+                  <label for="entry_exit">Transaction's Type:</label>
+                  <select name="entry_exit" id="entry_exit" class="form-control mb-2">
+                    <option value="Entry">Entry</option>
+                    <option value="Left">Left</option>
+                  </select>
+                  
+                  <button class="btn btn-dark">Salvar</button>
+                </form>
+              </div>
+
+              <div class="container-dashboard card">
+                <h1>Totally</h1>
+                <h3 id="total_value">R$ </h3>
+              </div>
+            
+          </div>
+          <div class="col-sm-4">
+            <div id="transactions">
+                <h2>My transactions</h2>
+              </div>
+          </div>
+        </div>
+    <div>
+
+
+    <!-- Modal -->
+    <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h1 class="modal-title fs-5" id="staticBackdropLabel">Update transaction</h1>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <form action="" method="post" id="form_update">
+              <label for="name_update">Transaction's name:</label>
+              <input type="text" id="name_update" name="name_update" class="form-control mb-2">
+  
+              <label for="value_update">Transaction's value:</label>
+              <input type="number" id="value_update" name="value_update" class="form-control mb-3">
+
+              <label for="entry_exit_update">Transaction's Type:</label>
+              <select name="entry_exit_update" id="entry_exit_update" class="form-control mb-2">
+                <option value="Entry">Entry</option>
+                <option value="Left">Left</option>
+              </select>
+  
+              <button type="submit" class="btn btn-primary w-100">Salvar</button>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.min.js"></script>
+
+  </body>
+  
+</html>

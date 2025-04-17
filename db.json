@@ -1,0 +1,15 @@
+{
+  "transaction": [
+    {
+      "id": "a120",
+      "name": "Mathues",
+      "value": "400",
+      "type_t": "Exit"
+    }
+  ],
+  "value_totaly": [
+    {
+      "totally": 900
+    }
+  ]
+}
