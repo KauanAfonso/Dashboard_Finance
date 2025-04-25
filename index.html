@@ -21,21 +21,21 @@
                   <input type="text" id="name" name="name" class="form-control mb-2">
                   
                   <label for="value">Transaction's value:</label>
-                  <input type="number" id="value" name="value" class="form-control mb-3">
+                  <input type="number" step="0.01" id="value" name="value" class="form-control mb-3">
 
                   <label for="entry_exit">Transaction's Type:</label>
                   <select name="entry_exit" id="entry_exit" class="form-control mb-2">
                     <option value="Entry">Entry</option>
-                    <option value="Left">Left</option>
+                    <option value="Exit">Exit</option>
                   </select>
                   
                   <button class="btn btn-dark">Salvar</button>
                 </form>
-              </div>
+            </div>
 
-              <div class="container-dashboard card">
-                <h1>Totally</h1>
-                <h3 id="total_value">R$ </h3>
+              <div class="container-dashboard total">
+                 <h1>Total</h1>
+                <h3 id="total_value"></h3>
               </div>
             
           </div>
@@ -61,7 +61,7 @@
               <input type="text" id="name_update" name="name_update" class="form-control mb-2">
   
               <label for="value_update">Transaction's value:</label>
-              <input type="number" id="value_update" name="value_update" class="form-control mb-3">
+              <input type="number" id="value_update" step="0.01" name="value_update" class="form-control mb-3">
 
               <label for="entry_exit_update">Transaction's Type:</label>
               <select name="entry_exit_update" id="entry_exit_update" class="form-control mb-2">

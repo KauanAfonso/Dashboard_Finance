@@ -1,6 +1,5 @@
 
 
-
 function renderTransactions(data){
     const div_main = document.createElement('div')
     div_main.classList = "card";
@@ -74,7 +73,7 @@ async function getTotal() {
 }   
 async function renderTotal() {
     const getTotalFunction = await getTotal()
-    document.getElementById('total_value').textContent = `R$ ${getTotalFunction}`
+    document.getElementById('total_value').textContent = `R$ ${getTotalFunction.toFixed(2)}`
    
 }
 
@@ -88,7 +87,7 @@ const form = document.getElementById('form')
         const data = {
             name:document.getElementById('name').value,
             value:document.getElementById('value').value,
-            type_t:document.getElementById('entry_exit_update').value
+            type_t:document.getElementById('entry_exit').value
         }
 
         const response = await fetch('http://localhost:3000/transaction', {
@@ -112,7 +111,7 @@ async function update_transaction(url) {
     const info = {
         name:document.getElementById('name_update').value,
         value:document.getElementById('value_update').value,
-        type_t:document.getElementById('entry_exit').value
+        type_t:document.getElementById('entry_exit_update').value
     }
 
     const response = await fetch(url,{

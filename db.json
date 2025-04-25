@@ -1,15 +1,34 @@
 {
   "transaction": [
     {
-      "id": "a120",
-      "name": "Mathues",
-      "value": "400",
+      "id": "dd42",
+      "name": "Compra shoope",
+      "value": "600",
+      "type_t": "Entry"
+    },
+    {
+      "name": "aaaa",
+      "value": "1000",
+      "type_t": "Left",
+      "id": "54e2"
+    },
+    {
+      "id": "6b54",
+      "name": "Compra shoope",
+      "value": "789",
+      "type_t": "Entry"
+    },
+    {
+      "id": "d4c4",
+      "name": "Mercado",
+      "value": "156.12",
       "type_t": "Exit"
     }
   ],
   "value_totaly": [
     {
-      "totally": 900
+      "totally": 900,
+      "id": "a2a3"
     }
   ]
 }
