@@ -1,160 +1,136 @@
+// Função para renderizar uma única transação
+function renderTransaction(transaction) {
+    const card = document.createElement('div');
+    card.className = 'card';
 
+    const inputId = document.createElement('input');
+    inputId.type = 'hidden';
+    inputId.value = transaction._id;
+    inputId.id = `transaction-${transaction._id}`;
 
-function renderTransactions(data){
-    const div_main = document.createElement('div')
-    div_main.classList = "card";
+    const nameEl = document.createElement('h4');
+    nameEl.textContent = `Nome da transação: ${transaction.name}`;
 
-    const name_transaction = document.createElement('h4');
-    name_transaction.textContent = `Nome da transação: ${data.name}`;
+    const typeEl = document.createElement('h5');
+    typeEl.textContent = `Tipo: ${transaction.type_t}`;
 
-    const input_id = document.createElement('input');
-    input_id.setAttribute('type','hidden');
-    input_id.value = data.id;
-    input_id.id = `transaction ${data.id}`
+    const valueEl = document.createElement('p');
+    valueEl.textContent = `Valor: R$ ${parseFloat(transaction.value).toFixed(2)}`;
 
-    const type = document.createElement('h5')
-    type.textContent = `Transaction's type: ${data.type_t}`
+    const btnDelete = document.createElement('button');
+    btnDelete.textContent = 'Excluir';
+    btnDelete.className = 'btn btn-danger';
+    btnDelete.id = `delete-${transaction._id}`;
 
-    const value_transaction = document.createElement('p');
-    value_transaction.textContent = `Value: ${data.value}`;
+    const btnUpdate = document.createElement('button');
+    btnUpdate.textContent = 'Atualizar';
+    btnUpdate.className = 'btn btn-dark';
+    btnUpdate.setAttribute('data-bs-toggle', 'modal');
+    btnUpdate.setAttribute('data-bs-target', '#staticBackdrop');
 
-    const btn_delete = document.createElement('button')
-    btn_delete.textContent = "Excluir";
-    btn_delete.classList ="btn btn-danger";
-    btn_delete.id = `Excluir ${data.id}`
+    card.append(inputId, nameEl, typeEl, valueEl, btnUpdate, btnDelete);
+    document.getElementById('transactions').appendChild(card);
 
-
-    const btn_update = document.createElement('button')
-    btn_update.setAttribute('data-bs-toggle', 'modal')
-    btn_update.setAttribute
-    ('data-bs-target', '#staticBackdrop')
-    btn_update.classList = "btn btn-dark"
-    btn_update.textContent = "Update"
-
-    div_main.append(input_id, name_transaction, type, value_transaction,btn_update ,btn_delete)
-    document.getElementById('transactions').append(div_main)
-    
-    const url = `http://localhost:3000/transaction/${data.id}`
-
-    btn_delete.addEventListener('click',()=> delete_transaction(url) )
-    btn_update.addEventListener('click',()=> form_uptade(url,data) )  
-
+    const url = `http://localhost:3000/transaction/${transaction._id}`;
+    btnDelete.addEventListener('click', () => deleteTransaction(url));
+    btnUpdate.addEventListener('click', () => loadUpdateForm(url, transaction));
 }
 
-
+// Buscar e renderizar todas as transações
 async function getTransactions(url) {
     const response = await fetch(url);
-    data = await response.json();
-    console.log(data)
-    data.forEach(renderTransactions);
+    const data = await response.json();
+    data.forEach(renderTransaction);
 }
 
-getTransactions('http://localhost:3000/transaction')
-
-
+// Calcular o total das transações
 async function getTotal() {
-    
-    let total = 0
-    const response = await fetch('http://localhost:3000/transaction')
-    data = await response.json();
-    try{
-    total = data.reduce((value,element)=>{
-        if(element.type_t == "Entry"){
-            return value+=parseFloat(element.value)
-        }else{
-            return value-=parseFloat(element.value)
-        }
-    },0)
-    }catch(Exeption){
-        console.log('erro' +Exeption)
-    }
+    try {
+        const response = await fetch('http://localhost:3000/transaction');
+        const data = await response.json();
 
-    return total
-}   
+        const total = data.reduce((acc, item) => {
+            const value = parseFloat(item.value);
+            return item.type_t === 'Entry' ? acc + value : acc - value;
+        }, 0);
+
+        return total;
+    } catch (error) {
+        console.error('Erro ao calcular total:', error);
+        return 0;
+    }
+}
+
+// Mostrar total no DOM
 async function renderTotal() {
-    const getTotalFunction = await getTotal()
-    document.getElementById('total_value').textContent = `R$ ${getTotalFunction.toFixed(2)}`
-   
+    const total = await getTotal();
+    document.getElementById('total_value').textContent = `R$ ${total.toFixed(2)}`;
 }
 
-renderTotal()
+// Criar uma nova transação
+document.getElementById('form').addEventListener('submit', async (ev) => {
+    ev.preventDefault();
 
-const form = document.getElementById('form')
-  
-    form.addEventListener('submit',  async(ev)=>{
-        ev.preventDefault()
+    const data = {
+        name: document.getElementById('name').value,
+        value: document.getElementById('value').value,
+        type_t: document.getElementById('entry_exit').value
+    };
 
-        const data = {
-            name:document.getElementById('name').value,
-            value:document.getElementById('value').value,
-            type_t:document.getElementById('entry_exit').value
-        }
+    await fetch('http://localhost:3000/transaction', {
+        method: 'POST',
+        headers: { 'Content-type': 'application/json' },
+        body: JSON.stringify(data)
+    });
 
-        const response = await fetch('http://localhost:3000/transaction', {
-            method:'POST',
-            headers:{
-                "Content-type": "application/json"
-            },
-            body:JSON.stringify(data)
-        })
+    ev.target.reset();
+    location.reload();
+});
 
-        const responseData = await response.json()
-        form.reset()
-        location.reload() 
-        getTransactions('http://localhost:3000/transaction')
-    
-    })
+// Atualizar uma transação
+async function updateTransaction(url) {
+    const updatedData = {
+        name: document.getElementById('name_update').value,
+        value: document.getElementById('value_update').value,
+        type_t: document.getElementById('entry_exit_update').value
+    };
 
+    const response = await fetch(url, {
+        method: 'PUT',
+        headers: { 'Content-type': 'application/json' },
+        body: JSON.stringify(updatedData)
+    });
 
-async function update_transaction(url) {
-
-    const info = {
-        name:document.getElementById('name_update').value,
-        value:document.getElementById('value_update').value,
-        type_t:document.getElementById('entry_exit_update').value
-    }
-
-    const response = await fetch(url,{
-        method:'PUT',
-        headers:{
-            "Content-type":'Application/json'
-        },
-        body:JSON.stringify(info)
-    })
-
-
-
-    const response_data = await response.json()
-    console.log(response_data)
+    const result = await response.json();
+    console.log('Atualizado:', result);
 }
 
-const form_uptade = (url, info) =>{
-    let form = document.getElementById('form_update')
-    form.action = url
-   
-    document.getElementById('name_update').value = info.name,
-    document.getElementById('value_update').value = info.value,
-    document.getElementById('entry_exit').value = info.value
-    
-    
-    form.addEventListener('submit', (ev)=>{
-        ev.preventDefault()
-        update_transaction(url)
-        location.reload()
-    })
-    
+// Carregar dados no formulário de atualização
+function loadUpdateForm(url, transaction) {
+    const form = document.getElementById('form_update');
+    form.action = url;
+
+    document.getElementById('name_update').value = transaction.name;
+    document.getElementById('value_update').value = transaction.value;
+    document.getElementById('entry_exit_update').value = transaction.type_t;
+
+    form.onsubmit = (ev) => {
+        ev.preventDefault();
+        updateTransaction(url).then(() => location.reload());
+    };
 }
 
-async function delete_transaction(url){
-        const response = await fetch(url,{
-            method:'DELETE',
-            headers:{
-                "Content-type": "Application/json"
-            },
-        });
+// Deletar uma transação
+async function deleteTransaction(url) {
+    await fetch(url, {
+        method: 'DELETE',
+        headers: { 'Content-type': 'application/json' }
+    });
 
-        alert('DELETADO COM SUCESSO')
-        location.reload()       
+    alert('Transação deletada com sucesso!');
+    location.reload();
 }
 
-
+// Inicialização
+getTransactions('http://localhost:3000/transaction');
+renderTotal();
